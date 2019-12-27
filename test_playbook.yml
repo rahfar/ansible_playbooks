@@ -1,0 +1,48 @@
+---
+# - name: play1
+#   hosts: localhost
+#   connection: local
+#   tasks:
+    # - name: testing shell cmd
+    #   get_url:
+    #     url: https://o.aolcdn.com/images/dims?quality=85&image_uri=https%3A%2F%2Fo.aolcdn.com%2Fimages%2Fdims%3Fresize%3D2000%252C2000%252Cshrink%26image_uri%3Dhttps%253A%252F%252Fs.yimg.com%252Fos%252Fcreatr-uploaded-images%252F2019-06%252Feac196a0-9208-11e9-afff-cd8f1d2c594b%26client%3Da1acac3e1b3290917d92%26signature%3D9713a0ddd32d7e8ce48fda7b66c2319c857b2bcc&client=amp-blogside-v2&signature=2f9f2cf6f4996d66267099e1df5def8b42d34705
+    #     dest: ./img
+# - name: play1
+#   hosts: localhost
+#   connection: local
+#   tasks:
+#     - name: testing shell cmd
+#       shell: 
+#         cmd: echo "{{ item }} {{ rtdm_db }}" >> out.txt
+#       with_items: "{{ groups['spm_dev'] }}"
+#     - debug: var=inventory_hostname
+#       register: result
+
+    # - debug: msg="{{ result.stdout }}"
+    # - debug: msg="{{ result.stderr }}"
+    # - debug: msg="{{ result.rc }}"
+    # - name: testing copy file
+    #   copy: 
+    #     src: '/home/farid/ansible_playbooks/file' 
+    #     dest: '~/file.copy'
+- name: play2
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks: 
+    # - name: copy on remote
+    #   copy:
+    #     src: "{{ item }}"
+    #     dest: ~/
+    #   with_fileglob:
+    #     - "./*.sas"
+    #   register: result
+    #   when: 1 == 1
+    # - debug: var=result
+    - name: copy on remote
+      shell:
+        cmd: echo '{{ hostvars[item].rtdm_db }}' > ~/ansible_playbooks/out.txt
+        # cmd: echo 'shit' > ~/ansible_playbooks/out.txt
+      with_items: "{{ groups['spm_dev'] }}"
+      register: result
+    - debug: var=hostvars
